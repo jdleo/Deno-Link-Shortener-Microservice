@@ -1,26 +1,27 @@
 import { Application, Router } from 'https://deno.land/x/oak/mod.ts';
 import { oakCors } from 'https://deno.land/x/cors/mod.ts';
 
+// import routes
+import { clicksRouter, linksRouter, redirectRouter } from './routes/mod.ts';
+
 // custom middleware
 import { logger } from './middleware/mod.ts';
 
 // port to listen on
 let port = Deno.env.get('PORT') ? parseInt(Deno.env.get('PORT')!) : 3001;
 
-// initialize oak app, and router
+// initialize oak app
 const app = new Application();
-const router = new Router();
-
-// routes
-router.get('/', ctx => {
-    ctx.response.body = { hello: 'world' };
-});
 
 // middleware and routes
 app.use(oakCors());
 app.use(logger);
-app.use(router.routes());
-app.use(router.allowedMethods());
+app.use(linksRouter.routes());
+app.use(linksRouter.allowedMethods());
+app.use(clicksRouter.routes());
+app.use(clicksRouter.allowedMethods());
+app.use(redirectRouter.routes());
+app.use(redirectRouter.allowedMethods());
 
 app.use(async (ctx, next) => {});
 
