@@ -1,11 +1,10 @@
 import { Application, Router } from 'https://deno.land/x/oak/mod.ts';
-import { oakCors } from 'https://deno.land/x/cors/mod.ts';
 
 // import routes
 import { clicksRouter, linksRouter, redirectRouter } from './routes/mod.ts';
 
 // custom middleware
-import { logger } from './middleware/mod.ts';
+import { logger, cors } from './middleware/mod.ts';
 
 // port to listen on
 let port = Deno.env.get('PORT') ? parseInt(Deno.env.get('PORT')!) : 3001;
@@ -14,7 +13,7 @@ let port = Deno.env.get('PORT') ? parseInt(Deno.env.get('PORT')!) : 3001;
 const app = new Application();
 
 // middleware and routes
-app.use(oakCors());
+app.use(cors());
 app.use(logger);
 app.use(linksRouter.routes());
 app.use(linksRouter.allowedMethods());
